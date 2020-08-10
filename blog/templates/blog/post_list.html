@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    {% for post in posts %}
+        <div class="post">
+            <div class="date">
+                <p>Published : {{ post.published_date }}</p>
+            </div> <!--class="date" END-->
+            <!--  <h2><a href="">{{ post.title | lower }}</a></h2>-->
+            <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title | title }}</a></h2>
+            <!--   줄바꿈 없이 나옴    <p>{{ post.text }}</p>    | : 필터표시 -->
+            <p>{{ post.text | linebreaksbr}}</p>
+            <!--  comments 는 models.py에 있는 Comment 클래스에서 related_name='comments' 부분에서 가져온 것임 -->
+            <a href="{% url 'post_detail' pk=post.pk %}">Comments:{{post.approved_comments.count}}</a>
+        </div>
+    {% empty %}
+        <div>요청하신 Post 가 존재하지 않습니다.</div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- static 경로 사용하려면 load static 꼭 선언해야 사용할 수 있다-->
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django Blog</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>-->
+    <!--  Google Lobster font  -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" type="text/css">
+    <!--  개발자 정의 css  -->
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <!--  favicon.ico 파일 적용  -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico'%}">
+</head>
+<body>
+    <div class="page-header">
+        {% if user.is_authenticated %}
+            <a href="{% url 'post_new' %}" class="top-menu">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+            <p class="top-menu"><small>HELLO, {{user.username}}(<a href="{% url 'logout' %}?next={{request.path}}">LOGOUT</a>)</small></p>
+        {% else %}
+            <a href="{% url 'login' %}" class="top-menu">
+                <span class="glyphicon glyphicon-lock"></span>
+            </a>
+        {% endif %}
+        <h1><a href="/">Django Blog</a></h1>
+    </div>
+    <!-- python 코드 또는 함수 호출 시, 중괄호 2개 겹쳐서 사용해야 한다. -->
+<!--    <p>웰컴 {{request.user}}</p>-->
+<!--    <p>{request.user}</p>-->
+<!--    &nbsp;-->
+<!--    <p>Http Method : {{request.method}}</p>-->
+
+    <div class = "content container">
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
+            </div> <!--class="col-md-8" END-->
+        </div> <!-- class="row" END -->
+    </div> <!--class="content container" END-->
+
+    {% comment "Optional note" %}
+        Server comment - 서버쪽 comment는 웹페이지에서는 보이지 않는다.
+    {% endcomment %}
+
+    <!--  html Client Comment : 클라이언트쪽 comment는 웹페이지 에서도 보인다. -->
+</body>
+</html>
