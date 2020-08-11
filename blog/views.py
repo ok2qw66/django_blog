@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import Post, Comment
 from .forms import PostModelForm, PostForm, CommentModelForm
@@ -116,6 +117,22 @@ def post_list(request):
     #     <p>Welcome, {name}님!!</p><p>{content}</p>'''.format(name=name, content=request.user))
 
     # QuerySet을 사용하여 DB에서 Post 목록 가져오기
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    #
+    # return render(request, 'blog/post_list.html', {'posts': posts})
+
+    # 페이지 별로 구분해서 리스트 출력하기
+    post_list = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    # post_list 목록에서 한페이지당 2개씩 할당
+    paginator = Paginator(post_list, 2)
+    # page 받아오기
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
 
     return render(request, 'blog/post_list.html', {'posts': posts})

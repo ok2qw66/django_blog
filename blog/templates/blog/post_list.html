@@ -15,4 +15,6 @@
     {% empty %}
         <div>요청하신 Post 가 존재하지 않습니다.</div>
     {% endfor %}
+    <!--  pagination.html 추가  -->
+    {% include 'blog/pagination.html' with page=posts %}
 {% endblock %}
